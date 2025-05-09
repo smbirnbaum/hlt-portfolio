@@ -11,54 +11,43 @@ redirect_from:
 
 Education
 ======
-* Ph.D in Version Control Theory, GitHub University, 2018 (expected)
-* M.S. in Jekyll, GitHub University, 2014
-* B.S. in GitHub, GitHub University, 2012
+* Master of Science in Human Language Technology, The University of Arizona (2025)  
+  * GPA: 3.0 (3.5 without mitigating circumstances)
+* Bachelor of Science in Technical Communication, Arizona State University (2021)  
+  * GPA: 3.7 – Graduated Summa Cum Laude
 
-Work experience
+Experience
 ======
-* Spring 2024: Academic Pages Collaborator
-  * GitHub University
-  * Duties includes: Updates and improvements to template
-  * Supervisor: The Users
+**Intern – XRI Global**  
+*Remote (US) – Nov 2024–Present*  
+- Audited speech datasets and created tooling to measure and report available audio per language
+- Built a reusable script to calculate total duration and file count across dozens of language corpora
+- Fine-tuned a Wav2Vec2 model for Turkmen using Common Voice data, including tokenizer reconstruction and evaluation
+- Participated in a collaborative project to identify gaps in multilingual AI resources for underrepresented languages  
 
-* Fall 2015: Research Assistant
-  * GitHub University
-  * Duties included: Merging pull requests
-  * Supervisor: Professor Hub
+**Technical Writer – Ringtail Interactive**  
+*Remote (Stockholm) – Feb 2023–Jan 2025*  
+- Created SDK integration documentation using Markdown  
+- Developed and enforced documentation style guidelines across 50+ assets  
+- Implemented docs-as-code strategy via Azure DevOps for version control  
 
-* Summer 2015: Research Assistant
-  * GitHub University
-  * Duties included: Tagging issues
-  * Supervisor: Professor Git
-  
+**Technical Writer – Sigma Technology Group**  
+*Gothenburg, Sweden – Jan 2022–Dec 2022*  
+- Produced technical mechanic and driver manuals for Volvo Cars & Buses  
+- Enhanced Fault Tracing and Diagnostics content with XML tools
+- Adapted documentation for global markets
+
+**Technical Writer / Localization Project Manager – Just for the Win**  
+*Gothenburg, Sweden – Sept 2018–Dec 2021*  
+- Authored UX copy, game specs, help files, and paytables using XML and DITA  
+- Led localization workflows and post-translation editing  
+- Wrote marketing copy in collaboration with marketing graphic artist.  
+
 Skills
 ======
-* Skill 1
-* Skill 2
-  * Sub-skill 2.1
-  * Sub-skill 2.2
-  * Sub-skill 2.3
-* Skill 3
-
-Publications
-======
-  <ul>{% for post in site.publications reversed %}
-    {% include archive-single-cv.html %}
-  {% endfor %}</ul>
-  
-Talks
-======
-  <ul>{% for post in site.talks reversed %}
-    {% include archive-single-talk-cv.html  %}
-  {% endfor %}</ul>
-  
-Teaching
-======
-  <ul>{% for post in site.teaching reversed %}
-    {% include archive-single-cv.html %}
-  {% endfor %}</ul>
-  
-Service and leadership
-======
-* Currently signed in to 43 different slack teams
+**Languages & Frameworks:** Python, Perl, Bash, R  
+**NLP/ML Libraries:** TensorFlow, PyTorch, Scikit-learn, spaCy, NLTK, CoreNLP  
+**Tools:** Git, GitHub, Azure DevOps, Docker, Singularity, VirtualBox, Visual Studio Code
+**Data & Analysis:** Pandas, Jupyter Notebooks, Matplotlib  
+**Platforms:** Linux (Ubuntu), Slurm, HPC Clusters, Kubernetes
+**Markup & Docs:** Markdown, XML, DITA
