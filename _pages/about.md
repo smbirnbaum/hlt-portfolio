@@ -7,6 +7,8 @@ redirect_from:
   - /about.html
 ---
 
+## Introduction 
+
 As a **technical writer**, my career has always centered around language, whether I’m documenting SDKs, managing multilingual content, or polishing translated text. I specialize in making highly technical information clear, usable, and accessible to diverse audiences. I bring nearly a decade of experience in documentation and localization project management to my work in human language technology.
 
 Before pivoting fully into tech, I worked in roles that combined administrative and technical responsibilities, especially within the mental health and non-profit sectors. While my titles were often administrative, my day-to-day work involved auditing documentation, creating how-tos, and writing user-facing content that supported both compliance and usability. These experiences sharpened my attention to detail and laid the foundation for my transition into more technically focused roles.
