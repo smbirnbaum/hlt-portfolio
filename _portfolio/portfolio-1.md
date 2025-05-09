@@ -25,7 +25,7 @@ Originally, I wanted to fine-tune an English **Wav2Vec2** model on Swedish data,
 - Jiwer for WER calculation
 - Slurm + Singularity on UArizona HPC (**Tesla P100 GPU**)
 
-#### Phase 1: Preprocessing, Setup, and Tokenizer Repair
+### Phase 1: Preprocessing, Setup, and Tokenizer Repair
 
 The first step was creating a usable dataset. I extracted audio-transcription pairs from `validated.tsv`, converted it to Hugging Face format, and saved it for training.
 
@@ -64,7 +64,7 @@ processor.save_pretrained('/home/u5/shawnabirnbaum/wav2vec2_sv_finetuned')
 ```
 Every tokenizer update meant retraining from scratch. But the transcriptions improved with each round, meaning that the fixes were working, and I was probably on the right track.
 
-#### Phase 2: Training on the HPC
+### Phase 2: Training on the HPC
 All training was done on the University of Arizona’s high-performance computing cluster using Slurm and a Tesla P100 GPU. I wrote a full training pipeline using the Hugging Face Trainer API and some Singularity containers, courtesy of Professor Hammond. Highlights included:
 
 - Mixed precision training (`fp16=True`)
@@ -85,132 +85,88 @@ from transformers import Wav2Vec2ForCTC, Wav2Vec2Processor, TrainingArguments, T
 from torch.nn.utils.rnn import pad_sequence
 from torch.utils.data import DataLoader
 
-# Check for GPU availability
-device = torch.device("cuda"  if torch.cuda.is_available() else  "cpu")
-print(f"Using device: {torch.cuda.get_device_name(0)}"  if torch.cuda.is_available() else  "No GPU detected. Running on CPU.")
+#  Check for GPU availability
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print(f"Using device: {torch.cuda.get_device_name(0)}" if torch.cuda.is_available() else "No GPU detected. Running on CPU.")
 
-# Load dataset
+#  Load dataset
 dataset_path = "/home/u5/shawnabirnbaum/data/preprocessed_swedish"
 dataset = load_from_disk(dataset_path)
 
-# Ensure dataset is split
-if  "train"  not  in dataset or  "test"  not  in dataset:
+#  Ensure dataset is split
+if "train" not in dataset or "test" not in dataset:
     dataset = dataset.train_test_split(test_size=0.1)
 
-# Load Wav2Vec2 model and processor
+#  Load Wav2Vec2 model and processor
 model_name = "/home/u5/shawnabirnbaum/wav2vec2_sv"
 model = Wav2Vec2ForCTC.from_pretrained(model_name).to(device)
 processor = Wav2Vec2Processor.from_pretrained(model_name)
-# Enable Gradient Checkpointing to save memory
+#  Enable Gradient Checkpointing to save memory
 model.gradient_checkpointing_enable()
 
-# Fix tokenizer padding issue
+
+#  Fix tokenizer padding issue
 processor.tokenizer.pad_token = "[PAD]"
 
-# Dynamically update vocab size
+#  Dynamically update vocab size
 model.config.vocab_size = len(processor.tokenizer)
 model.tie_weights()
 print(f" Updated model vocab size: {model.config.vocab_size}")
 
-# Preprocessing function
-def  preprocess_function(batch):
+#  Preprocessing function
+def preprocess_function(batch):
     audio, _ = torchaudio.load(batch["path"])
     batch["input_values"] = processor(audio.squeeze().numpy(), sampling_rate=16000).input_values[0]
     batch["labels"] = processor.tokenizer(batch["sentence"], padding="longest", return_tensors="pt").input_ids[0]
-
-return batch
-
-  
+    return batch
 
 dataset = dataset.map(preprocess_function, remove_columns=["path", "sentence"])
 
-  
+#  Custom Data Collator (Manual Padding)
+def data_collator(features):
+    input_values = [torch.tensor(f["input_values"]) for f in features]
+    labels = [torch.tensor(f["labels"]) for f in features]
 
-# Custom Data Collator (Manual Padding)
+    input_values = pad_sequence(input_values, batch_first=True, padding_value=processor.tokenizer.pad_token_id)
+    labels = pad_sequence(labels, batch_first=True, padding_value=-100)  
 
-def  data_collator(features):
+    return {"input_values": input_values, "labels": labels}
 
-input_values = [torch.tensor(f["input_values"]) for f in features]
-
-labels = [torch.tensor(f["labels"]) for f in features]
-
-  
-
-input_values = pad_sequence(input_values, batch_first=True, padding_value=processor.tokenizer.pad_token_id)
-
-labels = pad_sequence(labels, batch_first=True, padding_value=-100)
-
-  
-
-return {"input_values": input_values, "labels": labels}
-
-  
-
-# Training arguments
-
+#  Training arguments
 training_args = TrainingArguments(
-
-output_dir="/home/u5/shawnabirnbaum/wav2vec2_sv_finetuned",
-
-per_device_train_batch_size=8,
-
-evaluation_strategy="epoch",
-
-save_strategy="epoch",
-
-learning_rate=1e-4,
-
-num_train_epochs=2,
-
-logging_dir="/home/u5/shawnabirnbaum/logs",
-
-fp16=True,
-
-save_total_limit=2,
-
-remove_unused_columns=False,
-
-report_to="none",
-
-dataloader_num_workers=4,
-
-dataloader_pin_memory=True,
-
-gradient_accumulation_steps=4
-
+    output_dir="/home/u5/shawnabirnbaum/wav2vec2_sv_finetuned",
+    per_device_train_batch_size=8,
+    evaluation_strategy="epoch",
+    save_strategy="epoch",
+    learning_rate=1e-4,
+    num_train_epochs=2,
+    logging_dir="/home/u5/shawnabirnbaum/logs",
+    fp16=True,
+    save_total_limit=2,
+    remove_unused_columns=False,
+    report_to="none",
+    dataloader_num_workers=4,
+    dataloader_pin_memory=True,
+    gradient_accumulation_steps=4
 )
-
-  
 
 trainer = Trainer(
-
-model=model,
-
-args=training_args,
-
-train_dataset=dataset["train"],
-
-eval_dataset=dataset["test"],
-
-tokenizer=processor,
-
-data_collator=data_collator
-
+    model=model,
+    args=training_args,
+    train_dataset=dataset["train"],
+    eval_dataset=dataset["test"],
+    tokenizer=processor,
+    data_collator=data_collator
 )
 
-  
-
 trainer.train()
-
 model.save_pretrained("/home/u5/shawnabirnbaum/wav2vec2_sv_finetuned")
-
 processor.save_pretrained("/home/u5/shawnabirnbaum/wav2vec2_sv_finetuned")
-
 ```
 
   
 
-#### Phase 3: Final Model Performance
+### Phase 3: Final Model Performance
 
 The final training run completed on time, but one last bug tanked the output: I forgot to include `added_tokens.json` in the final model directory. It was the file that stored the extra characters I had added to the tokenizer. Without it, the model reverted to a broken vocabulary during inference.
 
@@ -330,7 +286,7 @@ By the end of the project, I had produced:
 
 While the final WER was not ideal, I finished with something far more useful: a full speech training pipeline I had built, broken, and fixed myself.
 
-#### What I Learned
+### What I Learned
 
 - Patch tokenizer vocab mismatches in Transformers
 - Create a dataset pipeline that integrates Hugging Face + torchaudio
@@ -339,7 +295,7 @@ While the final WER was not ideal, I finished with something far more useful: a 
 
 I also learned to be brutally pragmatic. I made mistakes, lost files, and had to rebuild things I thought were done. But that experience prepared me to take on even messier challenges later.
 
-#### HLT Learning Outcomes Demonstrated
+### HLT Learning Outcomes Demonstrated
 
 - **Write, debug, and document readable code** 
     - I developed, tested, and reworked several scripts (`train1.py`, `eval1.py`, `infer1.py`) to train and evaluate models efficiently.
@@ -355,7 +311,7 @@ I also learned to be brutally pragmatic. I made mistakes, lost files, and had to
 
   
 
-#### What I’d Do Differently
+### What I’d Do Differently
 
 If I could go back, I’d probably choose a different language altogether; ideally one with a larger dataset or better tokenizer support. Alternatively, I’d use a Norwegian or Danish base model and fine-tune on Swedish to see if mutual intelligibility could compensate for dataset limitations. Likely Norwegian as it is closer to Swedish than Danish is to Swedish.
 
@@ -368,7 +324,7 @@ If I had more time, I would:
 - Deploy the model in a simple streamlit or Flask demo
 - Compare the Swedish model’s output against other Nordic language models to assess transfer learning potential
 
-#### What’s Next?
+### What’s Next?
 I would like to build a Swedish model from scratch rather than using a pretrained one, if I had the proper resources.
 
-Luckily, everything I learned in this project got put to good use in the next project with XRI Global.
+Luckily, everything I learned in this project got put to good use in the [next project with XRI Global](_portfolio/portfolio-2.md).

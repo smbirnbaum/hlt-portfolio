@@ -4,8 +4,8 @@ excerpt: "A project in examining the gaps between low-resource languages in the 
 collection: portfolio
 ---
 
-# Bridging the Digital Divide with XRI Global
 ## Overview
+
 In lieu of a thesis, the University of Arizona’s Human Language Technology program requires a capstone internship. I completed mine with [XRI Global](https://www.xriglobal.ai/), a startup committed to tackling the underrepresentation of low-resource languages in AI. Spearheaded by Daniel Wilson, Ph.D., our team of interns joined forces on an ambitious initiative called [Bridging the Digital Divide](http://www.digitaldivide.ai/). The goal was to map out existing AI-relevant resources across the world’s languages with particular attention to those most often left out of NLP development pipelines.
 
 The resulting map would serve a broad range of stakeholders, from researchers and language activists to developers and policy makers. To support this effort, each intern was assigned specific tasks aligned with their technical background and strengths. While some collaborated on visualizations or web features, most of us worked independently due to the remote nature of the internship. My contributions centered around two main tasks: auditing the quantity of available speech data for each language, and later, building an automatic speech recognition (ASR) model for a severely underrepresented language.
@@ -13,8 +13,6 @@ The resulting map would serve a broad range of stakeholders, from researchers an
 ### Cataloging the World’s Audio Resources
 
 My first responsibility was to determine how much validated audio data existed per language in our curated corpus. To do this, I wrote a Python script using the `mutagen` library, which allowed me to extract duration metadata from audio files across multiple formats (.wav, .mp3, .flac, etc.). The script walked through a base directory structure where each folder represented a language, tallied the number of files per language, and calculated total durations in hours, minutes, and seconds. The output was written to a TSV file that gave us a clear overview of the available speech data.
-
-  
 
 ```python
 import os
@@ -115,6 +113,7 @@ if __name__ == "__main__":
         
         export_counts_to_tsv(total_durations, audio_files_per_language)
 ```
+
 Although the technical implementation was straightforward, the task itself was one of the most time-consuming parts of the internship. Each week brought a new list of languages to audit, and the datasets were massive. I ran into repeated issues with downloading full corpora due to network interruptions and unreliable hosting servers. Storage quickly became another bottleneck; we ran out of room on multiple cloud drives, requiring constant reshuffling of resources and manual cleanup.
 
 While these challenges weren’t strictly programming problems, they pushed me to think more like a developer than a documentation specialist. I had to break down my task into smaller, testable pieces, account for edge cases, and approach each new error with a troubleshooting mindset. It was humbling, but also incredibly rewarding to move beyond my comfort zone and contribute something practical.
@@ -126,7 +125,7 @@ While these challenges weren’t strictly programming problems, they pushed me t
 | Memory limitations on HPC | Used mixed precision + gradient accumulation |
 |Lack of capitalization in output|Added casing to tokenizer + rebuilt final model|
 
-#### Technologies & Libraries Used
+### Technologies & Libraries Used
 -  `transformers` (Hugging Face) for modeling and Trainer API
 -  `torchaudio` for audio loading and resampling
 -  `datasets` (Hugging Face) for dataset loading and preprocessing
@@ -135,9 +134,9 @@ While these challenges weren’t strictly programming problems, they pushed me t
 - Custom `Wav2Vec2Processor` with rebuilt tokenizer and feature extractor
 - Trained on Jarvis Labs using **NVIDIA A5000**
   
-During an inventory check, I noticed that some languages were missing. I took it upon myself to try creating a Turkmen ASR model using the techniques I learned in LING 696G. A small amount of audio data was available on Common Voice, and due to its mutual intelligibility, I decided to start with a pretrained Turkish model. Turkmen is considered a relatively low-resource language, particularly in the context of speech technologies, and my goal was to explore how transfer learning could help bootstrap ASR systems even when labeled data is limited.
+During an inventory check, I noticed that some languages were missing. Feeling courageous, I took it upon myself to try creating a Turkmen ASR model using the techniques I learned in LING 696G. A small amount of audio data was available on Common Voice, and due to its mutual intelligibility, I decided to start with a pretrained Turkish model. Turkmen is considered a relatively low-resource language, particularly in the context of speech technologies, and my goal was to explore how transfer learning could help bootstrap ASR systems even when labeled data is limited.
 
-#### Phase 1: Setup & Baseline
+### Phase 1: Setup & Baseline
 
 I trained on a remote [Jarvis Labs](https://jarvislabs.ai/) HPC with an **NVIDIA A5000 GPU** using a mix of Hugging Face’s `Trainer` API and `torchaudio` for audio preprocessing. The first training run focused on:
 
@@ -149,7 +148,7 @@ The results were mixed. My initial Word Error Rate (WER) was around **62%**, whi
 
   
 
-#### Phase 2: Tokenizer Rebuilds & Vocabulary Engineering
+### Phase 2: Tokenizer Rebuilds & Vocabulary Engineering
 I extracted all **unique characters** from the Turkmen `.tsv` files and used them to build a custom `Wav2Vec2CTCTokenizer`. I iterated multiple times:
 - First with lowercase-only characters (a–z, diacritics)
 - Then with full **case-sensitive vocab**
@@ -159,18 +158,16 @@ After each tokenizer update, I retrained from scratch and saw clear improvement.
 
   
 
-#### Phase 3: Full Dataset Training & Final Model
+### Phase 3: Full Dataset Training & Final Model
 Once I confirmed the full pipeline was stable, I trained on **the entire validated Turkmen corpus** (Common Voice v21.0). I built the training script from scratch using:
 
 -  `Wav2Vec2Processor` with custom tokenizer and feature extractor
-
 - A custom `data_collator` using `pad_sequence` for labels and input values
-
 - Resampling all audio to 16kHz using `torchaudio.functional.resample`
-
 - Evaluation with `jiwer.wer()` on the official test set
 
 ### Final Results
+
 - Final model achieved **WER = 0.1624 (16.24%)**
 - Tokenizer contained **57 characters**, including case-sensitive Turkmen orthography
 - No `[UNK]` tokens in the final transcriptions
@@ -187,7 +184,7 @@ The final model achieved a WER of **16.2%**, which is undeniably promising, espe
 
 That said, the consistent drop in training and evaluation loss across five epochs suggests that the model was learning meaningfully and not just memorizing the data. Earlier training runs using a less sophisticated tokenizer hovered around 62% WER, and each iteration, especially improvements to the tokenizer and vocabulary, contributed to better performance. In that sense, the final model may not be perfect, but it hopefully reflects the effectiveness of transfer learning and careful tuning in low-resource ASR development.
 
-#### Pseudocode
+### Pseudocode
 Turkmen ASR: Model Training Pipeline
 
 1. **Load Pretrained Resources**
