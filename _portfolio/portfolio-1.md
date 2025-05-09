@@ -4,6 +4,8 @@ excerpt: "Final project for Neural Techniques for Speech Technology Seminar"
 collection: portfolio
 ---
 
+All scripts related to this project can be found in this [repo](https://github.com/smbirnbaum/portfolio-scripts).
+
 ## Overview
 
 This project was the final assignment for **LING 696G: Neural Techniques for Speech Technology**. It was my first complete attempt at building an end-to-end ASR model.
