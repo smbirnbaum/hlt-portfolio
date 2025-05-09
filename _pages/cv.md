@@ -11,10 +11,8 @@ redirect_from:
 
 Education
 ======
-* Master of Science in Human Language Technology, The University of Arizona (2025)  
-  * GPA: 3.0 (3.5 without mitigating circumstances)
-* Bachelor of Science in Technical Communication, Arizona State University (2021)  
-  * GPA: 3.7 – Graduated Summa Cum Laude
+* Master of Science in Human Language Technology, The University of Arizona (expected graduation: Spring 2025)  
+* Bachelor of Science in Technical Communication, Arizona State University (2021)
 
 Experience
 ======
