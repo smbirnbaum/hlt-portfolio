@@ -14,8 +14,8 @@ title_separator          : "-"
 name                     : &name "Shawna Birnbaum"
 description              : &description "A summary of work performed for the University of Arizona's HLT program"
 url                      : https://smbirnbaum.github.io
-baseurl                  : "/smbirnbaum" # the subpath of your site, e.g. "/blog"
-repository               : "smbirnbaum/smbirnbaum.github.io"
+baseurl                  : "/hlt-portfolio" # the subpath of your site, e.g. "/blog"
+repository               : "smbirnbaum/hlt-portfolio.github.io"
 
 # Site Author - The following control what appear as part of the author content on the side bar.
 #               If a field is blank the icon and link will not appear, otherwise it will be shown.
@@ -30,7 +30,7 @@ author:
   email            : "shawnabirnbaum[at]arizona[dot]edu"
 
   # Repositories and software development
-  github           : "smbirnbaum"    
+  github           : "smbirnbaum/portfolio-scripts"    
 
   # Social media
   linkedin         : "in/smbirnbaum"
