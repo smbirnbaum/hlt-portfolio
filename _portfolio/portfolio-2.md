@@ -185,16 +185,14 @@ The final model achieved a WER of **16.2%**, which is undeniably promising, espe
 That said, the consistent drop in training and evaluation loss across five epochs suggests that the model was learning meaningfully and not just memorizing the data. Earlier training runs using a less sophisticated tokenizer hovered around 62% WER, and each iteration, especially improvements to the tokenizer and vocabulary, contributed to better performance. In that sense, the final model may not be perfect, but it hopefully reflects the effectiveness of transfer learning and careful tuning in low-resource ASR development.
 
 ### Pseudocode
+
 Turkmen ASR: Model Training Pipeline
 
-1. **Load Pretrained Resources**
-
+**Load Pretrained Resources**
 - Load the custom Wav2Vec2 processor (tokenizer + feature extractor)
 - Load the preprocessed Turkmen dataset from disk
 
----
-
-2. **Preprocessing Function**
+**Preprocessing Function**
 
 For each audio example:
 
@@ -208,17 +206,13 @@ For each audio example:
     "labels": [...]
   }
   ```
-  
----
 
- 3. **Dataset Preparation**
+ **Dataset Preparation**
 -   Apply `preprocess_fn` across the dataset
 -   Drop `"path"` and `"sentence"` columns
 -   Split into training (90%) and testing (10%) subsets
 
----
-
-4. **Data Collator**
+**Data Collator**
 
 Custom function to:
 
@@ -230,11 +224,8 @@ Custom function to:
 	    "input_values": padded_tensor,  "labels": padded_tensor 
     }
     ``` 
-    
 
----
-
-5. **Configure the Model**
+**Configure the Model**
 
 -   Load base config from Turkish Wav2Vec2 model
 -   Override:
@@ -242,21 +233,15 @@ Custom function to:
     -   `pad_token_id` from tokenizer
     -   `ctc_loss_reduction = "mean"`
     -   `ctc_zero_infinity = True`
-        
 
----
-
-6. **Initialize Model**
+**Initialize Model**
 
 -   Load pretrained model with `ignore_mismatched_sizes=True`
 -   Replace `lm_head` to match new vocab size
 -   Enable `gradient_checkpointing`
 -   Call `model.tie_weights()` to retie encoder-decoder output
-    
 
----
-
-7. **Training Configuration**
+**Training Configuration**
 
 Using Hugging Face `TrainingArguments`:
 
@@ -265,11 +250,8 @@ Using Hugging Face `TrainingArguments`:
 -   Evaluation & saving every epoch
 -   Mixed precision = `fp16`
 -   Output path: `/home/jl_fs/models/wav2vec2_turkmen_full_v2`
-    
 
----
-
-8. **Training**
+**Training**
 
 -   Instantiate Hugging Face `Trainer` with:
     -   Model

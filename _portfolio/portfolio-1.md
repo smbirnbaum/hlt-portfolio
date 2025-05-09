@@ -4,7 +4,7 @@ excerpt: "Final project for Neural Techniques for Speech Technology Seminar"
 collection: portfolio
 ---
 
-## Project Background
+## Overview
 
 This project was the final assignment for **LING 696G: Neural Techniques for Speech Technology**. It was my first complete attempt at building an end-to-end ASR model.
 
@@ -27,7 +27,70 @@ Originally, I wanted to fine-tune an English **Wav2Vec2** model on Swedish data,
 
 ### Phase 1: Preprocessing, Setup, and Tokenizer Repair
 
-The first step was creating a usable dataset. I extracted audio-transcription pairs from `validated.tsv`, converted it to Hugging Face format, and saved it for training.
+The first step was creating a usable dataset. I created a script to convert the Common Voice mp3s to .wav files.
+
+``` python
+
+from pydub import AudioSegment
+import os
+
+# Define source and output dirs
+source_dir = "./clips"  
+output_dir = "./wavs"   
+os.makedirs(output_dir, exist_ok=True)
+
+for filename in os.listdir(source_dir):
+    if filename.endswith(".mp3"):
+        mp3_path = os.path.join(source_dir, filename)
+        wav_filename = filename.replace(".mp3", ".wav")
+        wav_path = os.path.join(output_dir, wav_filename)
+
+        audio = AudioSegment.from_mp3(mp3_path)
+        audio = audio.set_frame_rate(16000).set_channels(1)
+        audio.export(wav_path, format="wav")
+
+print("All MP3s converted.")
+```
+
+And another script to retrieve a subset of 20 hours of audio data from the Common Voice dataset.
+
+``` python
+import pandas as pd
+
+# Load validated TSV and clip durations TSV
+validated_path = "validated.tsv"
+durations_path = "clip_durations.tsv"
+
+validated_df = pd.read_csv(validated_path, sep="\t")
+durations_df = pd.read_csv(durations_path, sep="\t")
+
+# Clean clip filename column to match validated path format
+durations_df["clip"] = durations_df["clip"].str.replace(".mp3", ".wav")
+durations_df["duration_sec"] = durations_df["duration[ms]"] / 1000  # Convert ms to sec
+
+# Merge on filename
+merged_df = validated_df.merge(durations_df, left_on="path", right_on="clip")
+
+# Sort by duration descending (or random shuffle for diversity)
+merged_df = merged_df.sample(frac=1, random_state=42)
+
+# Select ~20 hours (72000 seconds)
+selected_rows = []
+total_duration = 0
+for _, row in merged_df.iterrows():
+    if total_duration + row["duration_sec"] > 72000:
+        break
+    selected_rows.append(row)
+    total_duration += row["duration_sec"]
+
+# Save as TSV
+selected_df = pd.DataFrame(selected_rows)
+selected_df[["path", "sentence"]].to_csv("validated_20h.tsv", sep="\t", index=False, header=False)
+
+print(f"Selected {len(selected_df)} rows, total {total_duration / 3600:.2f} hours")
+```
+
+Then I extracted audio-transcription pairs from `validated_20.tsv`, converted it to Hugging Face format, and saved it for training.
 
 ``` python
 # convert_to_hf.py
@@ -327,4 +390,4 @@ If I had more time, I would:
 ### What’s Next?
 I would like to build a Swedish model from scratch rather than using a pretrained one, if I had the proper resources.
 
-Luckily, everything I learned in this project got put to good use in the [next project with XRI Global](_portfolio/portfolio-2.md).
+Luckily, everything I learned in this project got put to good use in the [next project with XRI Global](/_portfolio/portfolio-2.md).
