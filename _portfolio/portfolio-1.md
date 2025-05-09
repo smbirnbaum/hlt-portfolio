@@ -390,4 +390,4 @@ If I had more time, I would:
 ### What’s Next?
 I would like to build a Swedish model from scratch rather than using a pretrained one, if I had the proper resources.
 
-Luckily, everything I learned in this project got put to good use in the [next project with XRI Global](/_portfolio/portfolio-2.md).
+Luckily, everything I learned in this project got put to good use in the [next project with XRI Global](/portfolio/portfolio-2.md).
