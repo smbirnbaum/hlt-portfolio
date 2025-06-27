@@ -12,13 +12,14 @@ This project was the final assignment for **LING 696G: Neural Techniques for Spe
 
 Originally, I wanted to fine-tune an English **Wav2Vec2** model on Swedish data, but that quickly led to chaotic results; mixed-language "Swenglish" outputs due to the pretrained model’s English-centric phonetic bias. Instead, I pivoted and selected a Swedish-specific checkpoint: **KBLab/wav2vec2-large-voxrex**. My dataset came from the Common Voice corpus, trimmed down to 20 hours of validated speech.
 
-|Problem | Solution |
-|--|--|
-| Tokenizer lacked lowercase + special Swedish chars |Manually rebuilt tokenizer, adding casing + diacritics |
-| Mismatch between vocab + model | Used `ignore_mismatched_sizes=True` and rebuilt model head
-| CUDA OOM errors | Lowered batch size, added gradient checkpointing |
-| Transformers bug with batch dispatching | Downgraded to a stable library version |
-| Critical file loss after storage cleanup | Reprocessed dataset + renamed scripts to recover pipeline |
+| Problem                                | Solution                                                                 |
+|----------------------------------------|--------------------------------------------------------------------------|
+| Tokenizer lacked lowercase + special Swedish chars | Manually rebuilt tokenizer, adding casing + diacritics            |
+| Mismatch between vocab + model         | Used `ignore_mismatched_sizes=True` and rebuilt model head               |
+| CUDA OOM errors                        | Lowered batch size, added gradient checkpointing                         |
+| Transformers bug with batch dispatching | Downgraded to a stable library version                                   |
+| Critical file loss after storage cleanup | Reprocessed dataset + renamed scripts to recover pipeline               |
+
 
 ### Technologies & Libraries Used
 - `Transformers` (Hugging Face) for Wav2Vec2 modeling + Trainer API

@@ -119,11 +119,14 @@ Although the technical implementation was straightforward, the task itself was o
 While these challenges weren’t strictly programming problems, they pushed me to think more like a developer than a documentation specialist. I had to break down my task into smaller, testable pieces, account for edge cases, and approach each new error with a troubleshooting mindset. It was humbling, but also incredibly rewarding to move beyond my comfort zone and contribute something practical.
 
 ## Training a Turkmen ASR Model
-| Problem | Solution |
-| -- | -- |
-| Missing characters (`[UNK]`) | Rebuilt tokenizer with correct full character set |
-| Memory limitations on HPC | Used mixed precision + gradient accumulation |
+## Training a Turkmen ASR Model
+
+| Problem                         | Solution                                         |
+|--------------------------------|--------------------------------------------------|
+| Missing characters (`[UNK]`)   | Rebuilt tokenizer with correct full character set |
+| Memory limitations on HPC      | Used mixed precision + gradient accumulation     |
 | Lack of capitalization in output | Added casing to tokenizer + rebuilt final model |
+
 
 ### Technologies & Libraries Used
 -  `transformers` (Hugging Face) for modeling and Trainer API
