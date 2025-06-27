@@ -12,19 +12,19 @@ This project was the final assignment for **LING 696G: Neural Techniques for Spe
 
 Originally, I wanted to fine-tune an English **Wav2Vec2** model on Swedish data, but that quickly led to chaotic results; mixed-language "Swenglish" outputs due to the pretrained model’s English-centric phonetic bias. Instead, I pivoted and selected a Swedish-specific checkpoint: **KBLab/wav2vec2-large-voxrex**. My dataset came from the Common Voice corpus, trimmed down to 20 hours of validated speech.
 
-|Problem|Solution |
+|Problem | Solution |
 |--|--|
-|Tokenizer lacked lowercase + special Swedish chars |Manually rebuilt tokenizer, adding casing + diacritics |
-|Mismatch between vocab + model | Used `ignore_mismatched_sizes=True` and rebuilt model head
-|CUDA OOM errors | Lowered batch size, added gradient checkpointing |
-|Transformers bug with batch dispatching | Downgraded to a stable library version |
-|Critical file loss after storage cleanup | Reprocessed dataset + renamed scripts to recover pipeline |
+| Tokenizer lacked lowercase + special Swedish chars |Manually rebuilt tokenizer, adding casing + diacritics |
+| Mismatch between vocab + model | Used `ignore_mismatched_sizes=True` and rebuilt model head
+| CUDA OOM errors | Lowered batch size, added gradient checkpointing |
+| Transformers bug with batch dispatching | Downgraded to a stable library version |
+| Critical file loss after storage cleanup | Reprocessed dataset + renamed scripts to recover pipeline |
 
 ### Technologies & Libraries Used
-- Transformers (Hugging Face) for Wav2Vec2 modeling + Trainer API
-- Datasets (Hugging Face) for audio/text loading and preprocessing
-- Torchaudio for waveform decoding + resampling
-- Jiwer for WER calculation
+- `Transformers` (Hugging Face) for Wav2Vec2 modeling + Trainer API
+- `Datasets` (Hugging Face) for audio/text loading and preprocessing
+- `Torchaudio` for waveform decoding + resampling
+- `Jiwer` for WER calculation
 - Slurm + Singularity on UArizona HPC (**Tesla P100 GPU**)
 
 ### Phase 1: Preprocessing, Setup, and Tokenizer Repair
@@ -355,7 +355,7 @@ While the final WER was not ideal, I finished with something far more useful: a 
 
 - Patch tokenizer vocab mismatches in Transformers
 - Create a dataset pipeline that integrates Hugging Face + torchaudio
-- Write all major ASR pipeline components from scratch Troubleshoot GPU memory errors, logging bugs, and train/test misconfigurations
+- Write all major ASR pipeline components from scratch Troubleshoot GPU memory errors, logging bugs, and train/test misconfigurations  
 - Work within technical limits (e.g., GPU size, storage quota) on a real HPC system
 
 I also learned to be brutally pragmatic. I made mistakes, lost files, and had to rebuild things I thought were done. But that experience prepared me to take on even messier challenges later.

@@ -11,17 +11,17 @@ redirect_from:
 
 Education
 ======
-* Master of Science in Human Language Technology, The University of Arizona (expected graduation: Spring 2025)  
-* Bachelor of Science in Technical Communication, Arizona State University (2021)
+* Master of Science in Human Language Technology, The University of Arizona (Spring 2025)  
+* Bachelor of Science in Technical Communication, Arizona State University (Summer 2021)
 
 Experience
 ======
-**Intern – XRI Global**  
-*Remote (US) – Nov 2024–Present*  
+**Intern – [XRI Global](http://digitaldivide.ai)**  
+*Remote (US) – Nov 2024–May 2025*  
 - Audited speech datasets and created tooling to measure and report available audio per language
 - Built a reusable script to calculate total duration and file count across dozens of language corpora
 - Fine-tuned a Wav2Vec2 model for Turkmen using Common Voice data, including tokenizer reconstruction and evaluation
-- Participated in a collaborative project to identify gaps in multilingual AI resources for underrepresented languages  
+- Collaborated to identify gaps in multilingual AI resources for underrepresented languages  
 
 **Technical Writer – Ringtail Interactive**  
 *Remote (Stockholm) – Feb 2023–Jan 2025*  
@@ -45,7 +45,7 @@ Skills
 ======
 **Languages & Frameworks:** Python, Perl, Bash, R  
 **NLP/ML Libraries:** TensorFlow, PyTorch, Scikit-learn, spaCy, NLTK, CoreNLP  
-**Tools:** Git, GitHub, Azure DevOps, Docker, Singularity, VirtualBox, Visual Studio Code
+**Tools:** Git, GitHub, Azure DevOps, Docker, Singularity, VirtualBox, Visual Studio Code  
 **Data & Analysis:** Pandas, Jupyter Notebooks, Matplotlib  
-**Platforms:** Linux (Ubuntu), Slurm, HPC Clusters, Kubernetes
+**Platforms:** Linux (Ubuntu), Slurm, HPC Clusters, Kubernetes  
 **Markup & Docs:** Markdown, XML, DITA
