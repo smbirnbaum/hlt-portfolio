@@ -120,10 +120,10 @@ While these challenges weren’t strictly programming problems, they pushed me t
 
 ## Training a Turkmen ASR Model
 | Problem | Solution |
-|--|--|
+| -- | -- |
 | Missing characters (`[UNK]`) | Rebuilt tokenizer with correct full character set |
 | Memory limitations on HPC | Used mixed precision + gradient accumulation |
-| Lack of capitalization in output| Added casing to tokenizer + rebuilt final model |
+| Lack of capitalization in output | Added casing to tokenizer + rebuilt final model |
 
 ### Technologies & Libraries Used
 -  `transformers` (Hugging Face) for modeling and Trainer API
