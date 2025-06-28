@@ -119,7 +119,6 @@ Although the technical implementation was straightforward, the task itself was o
 While these challenges weren’t strictly programming problems, they pushed me to think more like a developer than a documentation specialist. I had to break down my task into smaller, testable pieces, account for edge cases, and approach each new error with a troubleshooting mindset. It was humbling, but also incredibly rewarding to move beyond my comfort zone and contribute something practical.
 
 ## Training a Turkmen ASR Model
-## Training a Turkmen ASR Model
 
 | Problem                         | Solution                                         |
 |--------------------------------|--------------------------------------------------|

@@ -352,11 +352,12 @@ By the end of the project, I had produced:
 
 While the final WER was not ideal, I finished with something far more useful: a full speech training pipeline I had built, broken, and fixed myself.
 
-### What I Learned
+### What I Learned  
 
 - Patch tokenizer vocab mismatches in Transformers
 - Create a dataset pipeline that integrates Hugging Face + torchaudio
-- Write all major ASR pipeline components from scratch Troubleshoot GPU memory errors, logging bugs, and train/test misconfigurations  
+- Write all major ASR pipeline components from scratch 
+- Troubleshoot GPU memory errors, logging bugs, and train/test misconfigurations  
 - Work within technical limits (e.g., GPU size, storage quota) on a real HPC system
 
 I also learned to be brutally pragmatic. I made mistakes, lost files, and had to rebuild things I thought were done. But that experience prepared me to take on even messier challenges later.
